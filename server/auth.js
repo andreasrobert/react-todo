@@ -46,11 +46,11 @@ router.post("/login", async(req,res) => {
     }
 
     try{
-        const token = jwt.sign({_id: user._id}, process.env.TOKEN_SECRET,{ expiresIn: '500s' });
+        const token = jwt.sign({_id: user._id}, process.env.TOKEN_SECRET,{ expiresIn: '400s' });
         // res.header("auth-token", token).send(token);
-        const expiryTime = new Date((new Date()).getTime() + 500*1000);
+        const expiryTime = new Date((new Date()).getTime() + 400*1000);
         res.cookie('token', token, {httpOnly: true, expires: expiryTime });
-        res.send(token);
+        res.redirect("/login");
     } catch(error){
         res.status(500).send(error);
     }

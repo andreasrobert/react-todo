@@ -1,5 +1,8 @@
 import express from 'express';
+import jwt from 'jsonwebtoken';
 import TodoTask from "./models/TodoTask.js";
+import cookie from "cookie";
+
 
 const router = express.Router();
 
@@ -47,9 +50,16 @@ router.get('/todo-json', (req, res) => {
 
 
 router.post('/todo', async (req, res) => {
-    console.log("i got something", { body: req.body });
+    
+    const cookies = cookie.parse(req.headers.cookie);
+    const token = cookies.token;
+    
+    let parsedToken = jwt.decode(token, { json: true});
+    parsedToken = JSON.parse(JSON.stringify(parsedToken));
+
     const todoTask = new TodoTask({
-        content: req.body.content
+        content: req.body.content,
+        author: parsedToken._id
     });
     try {
         await todoTask.save();
@@ -91,10 +101,6 @@ router.route("/remove-json/:id").get((req, res) => {
         res.send({message:"success"});
     });
 });
-
-
-
-
 
 router.get('/cheese', (req, res, next) => {
     res.sendFile(__dirname + "/public/cheese/index.html");

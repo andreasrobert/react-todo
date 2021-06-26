@@ -1,10 +1,8 @@
 import jwt from 'jsonwebtoken';
-
 import cookie from "cookie";
 
 export default function (req, res, next) {
     const cookies = cookie.parse(req.headers.cookie);
-    console.log('what are cookies', cookies);
     const token = cookies.token;
 
     // const token = req.header("auth-token");
