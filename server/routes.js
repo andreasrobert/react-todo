@@ -2,7 +2,7 @@ import express from 'express';
 import jwt from 'jsonwebtoken';
 import TodoTask from "./models/TodoTask.js";
 import cookie from "cookie";
-
+import mongoose from 'mongoose';
 
 const router = express.Router();
 
@@ -26,7 +26,15 @@ router.get('/', (req, res) => {
 });
 
 router.get('/todo', verify, (req, res) => {
-    TodoTask.find({}, (err, tasks) => {
+    const cookies = cookie.parse(req.headers.cookie);
+    const token = cookies.token;
+    
+    let parsedToken = jwt.decode(token, { json: true});
+    parsedToken = JSON.parse(JSON.stringify(parsedToken));
+    
+    const id = mongoose.Types.ObjectId(parsedToken._id);
+
+    TodoTask.find({author: id }, (err, tasks) => {
         res.render("todo.ejs", { todoTasks: tasks })
     });
 });
@@ -53,7 +61,7 @@ router.post('/todo', async (req, res) => {
     
     const cookies = cookie.parse(req.headers.cookie);
     const token = cookies.token;
-    
+
     let parsedToken = jwt.decode(token, { json: true});
     parsedToken = JSON.parse(JSON.stringify(parsedToken));
 
