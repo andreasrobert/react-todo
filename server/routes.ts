@@ -1,6 +1,6 @@
 import express from 'express';
 import jwt from 'jsonwebtoken';
-import TodoTask from "./models/TodoTask.js";
+import TodoTask from "./models/TodoTask";
 import cookie from "cookie";
 import mongoose from 'mongoose';
 
@@ -8,12 +8,13 @@ const router = express.Router();
 
 // import auth from "./auth";
 
-import auth from "./auth.js";
-import verify from "./verifyToken.js";
+import auth from "./auth";
+import verify from "./verifyToken";
 
 //const __dirname = process.cwd();
 import path from 'path';
-const __dirname = path.resolve();
+// @ts-ignore
+// const __dirname = path.resolve();
 
 
 router.use('/', (req, res, next) => {
@@ -96,7 +97,7 @@ router.route("/edit/:id")
 
 router.route("/remove/:id").get((req, res) => {
     const id = req.params.id;
-    TodoTask.findByIdAndRemove(id, err => {
+    TodoTask.findByIdAndRemove(id, null, err => {
         if (err) return res.send(500, err);
         res.redirect("/todo");
     });
@@ -104,7 +105,7 @@ router.route("/remove/:id").get((req, res) => {
 
 router.route("/remove-json/:id").get((req, res) => {
     const id = req.params.id;
-    TodoTask.findByIdAndRemove(id, err => {
+    TodoTask.findByIdAndRemove(id, null, err => {
         if (err) return res.send(500, err);
         res.send({message:"success"});
     });

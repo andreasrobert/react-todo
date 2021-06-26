@@ -1,7 +1,7 @@
 import express from "express";
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
-import User from "./models/user.js";
+import User from "./models/user";
 import cookieParser from "cookie-parser";
 
 
@@ -40,7 +40,7 @@ router.post("/login", async(req,res) => {
         return res.status(400).send("Incorrect User"); 
     }
 
-    const validPassword = await bcrypt.compare(req.body.password, user.password);
+    const validPassword = await bcrypt.compare(req.body.password, (user as any).password);
     if(!validPassword){
         return res.status(400).send("Incorrect Password");
     }

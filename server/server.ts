@@ -2,7 +2,7 @@
 // const bodyParser = require('body-parser');
 import express from 'express';
 import path from'path';
-import routes from './routes.js';
+import routes from './routes';
 import mongoose from 'mongoose';
 import cors from'cors';
 import dotenv from 'dotenv';
