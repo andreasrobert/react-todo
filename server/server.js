@@ -1,20 +1,21 @@
-const express = require('express');
-const path = require('path');
-const fs = require("fs");
-const routes = require('./routes');
-const mongoose = require('mongoose');
+// const express = require('express');
 // const bodyParser = require('body-parser');
-const cors = require('cors')
+import express from 'express';
+import path from'path';
+import routes from './routes.js';
+import mongoose from 'mongoose';
+import cors from'cors';
+import dotenv from 'dotenv';
+
+dotenv.config();
 
 
-
-const dbURI = "mongodb+srv://robert1:one2three@nodetuts.fx0g8.mongodb.net/TodoList?retryWrites=true&w=majority";
 
 const PORT = process.env.PORT || 8000;
 const app = express();
 
 
-mongoose.connect(dbURI,{useNewUrlParser: true, useUnifiedTopology: true, useFindAndModify: false }, () => {
+mongoose.connect(process.env.dbURL,{useNewUrlParser: true, useUnifiedTopology: true, useFindAndModify: false }, () => {
     console.log("Connected to db!");
     app.listen(PORT,() => {
         console.log(`Server running on port ${PORT}`)
@@ -23,7 +24,7 @@ mongoose.connect(dbURI,{useNewUrlParser: true, useUnifiedTopology: true, useFind
 
 })
 
-app.use(cors())
+app.use(cors());
 app.set("view engine", "ejs");
 app.use('/static', express.static('public'));
 

@@ -1,8 +1,16 @@
-const express = require('express');
-const TodoTask = require("./models/TodoTask");
+import express from 'express';
+import TodoTask from "./models/TodoTask.js";
 
 const router = express.Router();
 
+// import auth from "./auth";
+
+import auth from "./auth.js";
+import verify from "./verifyToken.js";
+
+//const __dirname = process.cwd();
+import path from 'path';
+const __dirname = path.resolve();
 
 
 router.use('/', (req, res, next) => {
@@ -14,10 +22,21 @@ router.get('/', (req, res) => {
     res.sendFile('views/main.html', { root: __dirname });
 });
 
-router.get('/todo', (req, res) => {
+router.get('/todo', verify, (req, res) => {
     TodoTask.find({}, (err, tasks) => {
         res.render("todo.ejs", { todoTasks: tasks })
     });
+});
+
+router.get('/login', (req, res) => {
+    res.sendFile('views/login.html', { root: __dirname });
+});
+
+router.post('/register', auth);
+router.post('/login', auth);
+
+router.get('/logout', (req, res) => {
+    res.sendFile('views/logout.html', { root: __dirname });
 });
 
 router.get('/todo-json', (req, res) => {
@@ -28,7 +47,7 @@ router.get('/todo-json', (req, res) => {
 
 
 router.post('/todo', async (req, res) => {
-    console.log("i got soething", { body: req.body });
+    console.log("i got something", { body: req.body });
     const todoTask = new TodoTask({
         content: req.body.content
     });
@@ -83,10 +102,11 @@ router.get('/cheese', (req, res, next) => {
 });
 
 
-router.get('/:id', (req, res, next) => {
-    res.json({ message: "hello " + req.params.id });
-})
+// router.get('/:id', (req, res, next) => {
+//     res.json({ message: "hello " + req.params.id });
+// })
 
 
+export default router;
 
-module.exports = router;
+//module.exports = router;
