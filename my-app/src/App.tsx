@@ -1,47 +1,20 @@
 import React, { useEffect, useReducer, useState } from 'react';
 import './App.css';
+import reducer from './reducers/todo'
+
 
 type Todo = { _id: string; content: string; selected?: boolean };
 type TodoList = Array<Todo>
 
-function reducer(
-  state: TodoList,
-  // action: {type: 'loadData', data: TodoList } | {type: 'addTodo', data: Todo }
-  action: any
-) {
-  switch (action.type){
-    case "loadData":
-      return action.data
-    case "addTodo":
-      return [...state, action.data]
-    case "removeAll":
-      return []
-    case "removeOne":
-      return state.filter(item => item._id !== action.data )
-    case "setTodoToRemove":
-      return state.map(item => {
-        if (item._id === action.data){
-          return ({
-            ...item,
-            selected:true
-          })
-        }
-        return item
-      })
-    default:
-      throw new Error();
-  }
-}
+
 
 function App() {
   const [input, setInput] = useState("");
-  // const [state, setState] = useState([] as Array<{ id: string; content: string }>);
   const isInputEmpty = input === "";
   const [state, dispatch] = useReducer(reducer, [] as TodoList);
 
 
   useEffect(()=>{
-    // const savedData = input;
     fetch("http://localhost:8000/todo-json",{
       method: "GET",  
       headers: {
@@ -87,25 +60,17 @@ function App() {
           <button onClick={() => {
             fetch("http://localhost:8000/todo", {
               method: "post",
-              // mode: 'cors',
               headers: {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json'
               },
-              // headers: {
-              // 'content-type': 'application/json',
-              // 'content-type': 'application/x-www-form-urlencoded',
-              // 'content-length': "" + (input.length),
-              // },
 
               body: JSON.stringify({ content: input })
 
-              // body: `content=${input}`
-              // jsonBody: "{content: 'bbb'",
+ 
             })
-            // setState([...state,{content: input,id:""}])
+            
             dispatch({type: "addTodo", data: {content: input, _id: Math.random().toString(36).substring(7) }})
-
             setInput("")
 
           }}>SAVE</button>
@@ -114,7 +79,7 @@ function App() {
           <button onClick={removeSelected} >Cleary Unwanted</button>
 
         </div>
-          you just wrote : {}
+          you just wrote : 
         <div>
           {state.map(item => (
             <div key={item._id}>

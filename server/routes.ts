@@ -60,19 +60,19 @@ router.get('/todo-json', (req, res) => {
 
 router.post('/todo', async (req, res) => {
     
-    const cookies = cookie.parse(req.headers.cookie);
-    const token = cookies.token;
+    // const cookies = cookie.parse(req.headers.cookie);
+    // const token = cookies.token;
 
-    let parsedToken = jwt.decode(token, { json: true});
-    parsedToken = JSON.parse(JSON.stringify(parsedToken));
+    // let parsedToken = jwt.decode(token, { json: true});
+    // parsedToken = JSON.parse(JSON.stringify(parsedToken));
 
     const todoTask = new TodoTask({
         content: req.body.content,
-        author: parsedToken._id
+        // author: parsedToken._id
     });
     try {
         await todoTask.save();
-        res.redirect("/todo");
+        // res.redirect("/todo");
     } catch (err) {
         res.redirect("/todo");
     }
