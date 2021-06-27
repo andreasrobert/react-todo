@@ -1,5 +1,5 @@
-type Todo = { _id: string; content: string; selected?: boolean };
-type TodoList = Array<Todo>
+export type Todo = { _id: string; content: string; selected?: boolean };
+export type TodoList = Array<Todo>
 
 export default function reducer(
     state: TodoList,

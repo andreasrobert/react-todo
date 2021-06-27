@@ -1,10 +1,6 @@
 import React, { useEffect, useReducer, useState } from 'react';
 import './App.css';
-import reducer from './reducers/todo'
-
-
-type Todo = { _id: string; content: string; selected?: boolean };
-type TodoList = Array<Todo>
+import reducer, { TodoList } from './reducers/todo'
 
 
 
