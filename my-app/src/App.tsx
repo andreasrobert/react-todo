@@ -6,8 +6,9 @@ import reducer, { TodoList } from './reducers/todo'
 
 function App() {
   const [input, setInput] = useState("");
-  const isInputEmpty = input === "";
   const [state, dispatch] = useReducer(reducer, [] as TodoList);
+  const isInputEmpty = input === "";
+
 
 
   useEffect(()=>{
@@ -62,8 +63,6 @@ function App() {
               },
 
               body: JSON.stringify({ content: input })
-
- 
             })
             
             dispatch({type: "addTodo", data: {content: input, _id: Math.random().toString(36).substring(7) }})
@@ -73,21 +72,19 @@ function App() {
 
           <button onClick={onClear} >CLEAR</button>
           <button onClick={removeSelected} >Cleary Unwanted</button>
-
         </div>
+
           you just wrote : 
+
         <div>
           {state.map(item => (
             <div key={item._id}>
               <div>{item.content}</div>
               <button onClick={() => onRemoveTodo(item._id)}>Remove</button>
-              <input type="checkbox" defaultChecked={item.selected} onChange={() => {
-                dispatch({ type: "setTodoToRemove", data: item._id})
-              }}/>
+              <input type="checkbox" defaultChecked={item.selected} onChange={()=> {dispatch({ type: "setTodoToRemove", data: item._id}) }}/>
             </div>
           ))}
         </div>
-
 
       </header>
     </div>

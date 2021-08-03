@@ -1,11 +1,7 @@
 export type Todo = { _id: string; content: string; selected?: boolean };
 export type TodoList = Array<Todo>
 
-export default function reducer(
-    state: TodoList,
-    // action: {type: 'loadData', data: TodoList } | {type: 'addTodo', data: Todo }
-    action: any
-  ) {
+export default function reducer(state: TodoList, action: any) {  //action: {type:'loadData', data:TodoList } | {type:'addTodo', data:Todo }
     switch (action.type){
       case "loadData":
         return action.data
@@ -17,15 +13,12 @@ export default function reducer(
         return state.filter(item => item._id !== action.data )
       case "setTodoToRemove":
         return state.map(item => {
-          if (item._id === action.data){
-            return ({
-              ...item,
-              selected:true
-            })
-          }
+          if (item._id === action.data){ return ({...item,selected:true})}
+
           return item
         })
+
       default:
         throw new Error();
     }
-  }
+  } 
